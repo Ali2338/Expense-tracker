@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axiosInstance from '../utils/axiosInstance';
-import { API_PATHS } from '../utils/apiPaths';
 
 const OtpVerification = () => {
   const [otp, setOtp] = useState('');
@@ -29,21 +28,23 @@ const OtpVerification = () => {
   };
 
   return (
-    <div className="flex flex-col items-center mt-20">
-      <h2 className="text-xl font-bold mb-4">Verify OTP</h2>
-      <form onSubmit={handleVerify} className="w-full max-w-sm">
-        <input
-          className="border border-gray-300 p-2 w-full mb-4"
-          type="text"
-          placeholder="Enter OTP"
-          value={otp}
-          onChange={(e) => setOtp(e.target.value)}
-        />
-        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
-        <button className="btn-primary w-full" type="submit">
-          Verify OTP
-        </button>
-      </form>
+    <div className="flex flex-col items-center justify-center min-h-screen px-4">
+      <div className="bg-white shadow-md rounded-2xl p-6 w-full max-w-sm">
+        <h2 className="text-xl font-bold mb-6 text-center">Verify OTP</h2>
+        <form onSubmit={handleVerify}>
+          <input
+            className="border border-gray-300 rounded-lg p-3 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            type="text"
+            placeholder="Enter OTP"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+          />
+          {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+          <button className="btn-primary w-full" type="submit">
+            Verify OTP
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
