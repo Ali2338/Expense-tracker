@@ -72,81 +72,106 @@ const Home = () => {
 
   return (
     <DashboardLayout activeMenu="Dashboard">
-      <div className="my-4 mx-auto">
-        <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-          <InfoCard
-            icon={<IoMdCard />}
-            label="Total balance"
-            value={addThousandSeparator(dashboardData?.totalBalance || 0)}
-            color="bg-primary"
-          />
-          <InfoCard
-            icon={<LuWalletMinimal />}
-            label="Total Income"
-            value={addThousandSeparator(dashboardData?.totalIncome || 0)}
-            color="bg-orange-500"
-          />
-          <InfoCard
-            icon={<LuHandCoins />}
-            label="Total Expense"
-            value={addThousandSeparator(dashboardData?.totalExpense || 0)}
-            color="bg-red-500"
-          />
-        </div>
-
-        {/* Budget Update Section */}
-        <div className="mt-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-2xl font-semibold">Set Budget Limit</h2>
-              <p className="text-sm text-gray-500">Set your desired monthly budget limit.</p>
-            </div>
-            <form onSubmit={handleBudgetChange} className="flex items-center space-x-4">
-              <input
-                type="number"
-                value={newBudgetLimit}
-                onChange={(e) => setNewBudgetLimit(Number(e.target.value))}
-                className="border p-2 rounded"
-                placeholder="Enter budget"
-                min="0"
-              />
-              <button 
-                type="submit" 
-                className={`bg-blue-500 text-white p-2 rounded ${isUpdatingBudget ? 'opacity-50 cursor-not-allowed' : ''}`} 
-                disabled={isUpdatingBudget}
-              >
-                {isUpdatingBudget ? 'Saving...' : 'Save Budget'}
-              </button>
-            </form>
-          </div>
-          {budgetUpdateError && <p className="text-red-500 mt-2">{budgetUpdateError}</p>}
-        </div>
-
-        <div className='grid grid-cols-1 md:grid-cols-3 gap-6 mt-6'>
-          <RecentTransactions
-            transactions={dashboardData?.recentTransactions}
-          />
-          <FinanceOverview
-            totalBalance={dashboardData?.totalBalance || 0}
-            totalExpense={dashboardData?.totalExpense || 0}
-            totalIncome={dashboardData?.totalIncome || 0}
-          />
-          <ExpenseTransactions
-            transactions={dashboardData?.last30DaysExpenses?.transactions || []}
-            onSeeMore={() => navigate("/expense")}
-          />
-          <Last30DaysExpenses data={dashboardData?.last30DaysExpenses?.transactions || []} />
-          <RecentIncomeWithChart
-            data={dashboardData?.last60DaysIncome?.transactions?.slice(0, 4) || []}
-            totalIncome={dashboardData?.totalIncome || 0}
-          />
-          <RecentIncome
-            transactions={dashboardData?.last60DaysIncome?.transactions || []}
-            onSeeMore={() => navigate("/income")}
-          />
-        </div>
+    <div
+      className="
+        my-4
+        px-4                /* side padding */
+        w-full
+        max-w-full
+        lg:max-w-6xl        /* center only on big screens */
+        mx-auto
+        overflow-x-hidden   /* prevent horizontal scrollbar */
+      "
+    >
+      {/* Top Info Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <InfoCard
+          icon={<IoMdCard />}
+          label="Total Balance"
+          value={addThousandSeparator(dashboardData?.totalBalance || 0)}
+          color="bg-primary"
+        />
+        <InfoCard
+          icon={<LuWalletMinimal />}
+          label="Total Income"
+          value={addThousandSeparator(dashboardData?.totalIncome || 0)}
+          color="bg-orange-500"
+        />
+        <InfoCard
+          icon={<LuHandCoins />}
+          label="Total Expense"
+          value={addThousandSeparator(dashboardData?.totalExpense || 0)}
+          color="bg-red-500"
+        />
       </div>
-    </DashboardLayout>
+
+      {/* Budget Update Section */}
+      <div className="mt-6 bg-white rounded-xl shadow-sm p-4">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+          <div>
+            <h2 className="text-xl font-semibold">Set Budget Limit</h2>
+            <p className="text-sm text-gray-500">
+              Set your desired monthly budget limit.
+            </p>
+          </div>
+          <form
+            onSubmit={handleBudgetChange}
+            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3"
+          >
+            <input
+              type="number"
+              value={newBudgetLimit}
+              onChange={(e) => setNewBudgetLimit(Number(e.target.value))}
+              className="border p-2 rounded w-full sm:w-auto"
+              placeholder="Enter budget"
+              min="0"
+            />
+            <button
+              type="submit"
+              className={`bg-blue-500 text-white px-4 py-2 rounded ${
+                isUpdatingBudget ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              disabled={isUpdatingBudget}
+            >
+              {isUpdatingBudget ? "Saving..." : "Save Budget"}
+            </button>
+          </form>
+        </div>
+        {budgetUpdateError && (
+          <p className="text-red-500 mt-2">{budgetUpdateError}</p>
+        )}
+      </div>
+
+      {/* Dashboard Widgets */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        <RecentTransactions
+          transactions={dashboardData?.recentTransactions}
+        />
+        <FinanceOverview
+          totalBalance={dashboardData?.totalBalance || 0}
+          totalExpense={dashboardData?.totalExpense || 0}
+          totalIncome={dashboardData?.totalIncome || 0}
+        />
+        <ExpenseTransactions
+          transactions={dashboardData?.last30DaysExpenses?.transactions || []}
+          onSeeMore={() => navigate("/expense")}
+        />
+        <Last30DaysExpenses
+          data={dashboardData?.last30DaysExpenses?.transactions || []}
+        />
+        <RecentIncomeWithChart
+          data={
+            dashboardData?.last60DaysIncome?.transactions?.slice(0, 4) || []
+          }
+          totalIncome={dashboardData?.totalIncome || 0}
+        />
+        <RecentIncome
+          transactions={dashboardData?.last60DaysIncome?.transactions || []}
+          onSeeMore={() => navigate("/income")}
+        />
+      </div>
+    </div>
+  </DashboardLayout>
   );
 };
 
