@@ -97,7 +97,7 @@ const SignUp = () => {
               />
             </div>
 
-            <div className='col-span-2 w-full'>
+            <div className='col-span-1 md:col-span-2 w-full'>
               <Input
                 value={password}
                 onChange={({ target }) => setPassword(target.value)}
@@ -107,8 +107,6 @@ const SignUp = () => {
               />
             </div>
           </div>
-
-
           {error && <p className='text-red-500 text-sm pb-2.5'>{error}</p>}
 
           <button
