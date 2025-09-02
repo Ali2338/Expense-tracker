@@ -1,5 +1,11 @@
+# Environment & system files
 .env
 node_modules/
 *.log
-.DS_Storeg
-backend/uploads/
+.DS_Store
+
+# Ignore all uploaded files
+backend/uploads/*
+
+# But keep this placeholder so folder is tracked
+!backend/uploads/.gitkeep
