@@ -77,21 +77,27 @@ const SignUp = () => {
         <form onSubmit={handleSignUp}>
           <ProfilePhotoSelector image={profilepic} setImage={setProfilePic} />
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            <Input
-              value={fullname}
-              onChange={({ target }) => setFullName(target.value)}
-              label="Full Name"
-              placeholder="Enter your full name"
-              type="text"
-            />
-            <Input
-              value={email}
-              onChange={({ target }) => setEmail(target.value)}
-              label="Email Address"
-              placeholder="Enter your email"
-              type="text"
-            />
-            <div className='col-span-2'>
+            <div className="w-full">
+              <Input
+                value={fullname}
+                onChange={({ target }) => setFullName(target.value)}
+                label="Full Name"
+                placeholder="Enter your full name"
+                type="text"
+              />
+            </div>
+
+            <div className="w-full">
+              <Input
+                value={email}
+                onChange={({ target }) => setEmail(target.value)}
+                label="Email Address"
+                placeholder="Enter your email"
+                type="text"
+              />
+            </div>
+
+            <div className='col-span-2 w-full'>
               <Input
                 value={password}
                 onChange={({ target }) => setPassword(target.value)}
@@ -101,6 +107,7 @@ const SignUp = () => {
               />
             </div>
           </div>
+
 
           {error && <p className='text-red-500 text-sm pb-2.5'>{error}</p>}
 
