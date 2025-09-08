@@ -30,6 +30,14 @@ app.use('/api/v1/income',incomeRoutes);
 app.use('/api/v1/expense',expenseRoutes);
 app.use('/api/v1/dashboard',dashboardRoutes);
 
+app.get('/api/health', (req, res) => {
+    res.status(200).json({
+        status: "ok",
+        uptime: process.uptime(),
+        timestamp: new Date(),
+    });
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT,()=>{
     console.log(`Server is running on port ${PORT}`);
