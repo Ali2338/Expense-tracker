@@ -14,15 +14,16 @@ router.get("/userInfo", protect, getUserInfo);
 
 
 router.post("/upload-image", upload.single('image'), (req, res) => {
-    console.log(req.file);
-    if (!req.file) {
-        return res.status(400).json({ message: "No file uploaded" });
-    }
+  if (!req.file) {
+    return res.status(400).json({ message: "No file uploaded" });
+  }
 
-    // Corrected line: Always use 'https' for the protocol
-    const imageUrl = `https://${req.get('host')}/uploads/${req.file.filename}`;
+  const backendURL = "https://expense-tracker-nnmw.onrender.com" || `${req.protocol}://${req.get('host')}`;
+  const imageUrl = `${backendURL}/uploads/${req.file.filename}`;
 
-    res.status(200).json({ imageUrl });
+  res.status(200).json({ imageUrl });
 });
+
+
 
 module.exports = router;
