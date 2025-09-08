@@ -7,8 +7,8 @@ const { generateOtp, sendOtp } = require('../utils/emailService');
 //const { sendOtp, generateOtp } = require('../utils/sendOtp'); // Import OTP functions
 
 
-const generatetoken = (id)=>{
-    return jwt.sign({id},process.env.JWT_SECRET,{expiresIn:"1h" })
+const generatetoken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1h" })
 }
 
 
@@ -57,42 +57,51 @@ exports.registerUser = async (req, res) => {
 };
 
 exports.loginUser = async (req, res) => {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-  
-    try {
-      const user = await User.findOne({ email });
-      if (!user || !(await user.comparePassword(password))) {
-        return res.status(400).json({ message: "Invalid credentials" });
-      }
-  
-      const otp = generateOtp();
-      const otpExpires = Date.now() + 5 * 60 * 1000;
-  
-      user.otp = otp;
-      user.otpExpires = otpExpires;
-      await user.save();
-  
-      await sendOtp(email, otp);
-  
-      res.status(200).json({ message: "OTP sent to your email. Please verify to continue.", userId: user._id });
-    } catch (err) {
-      res.status(500).json({ message: "Error in login", error: err.message });
-    }
-  };
-  
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
 
-exports.getUserInfo = async(req,res)=>{
-    try{
-        const user = await User.findById(req.user._id).select("-password");
-        if(!user){
-            return res.status(404).json({message:"User not found"});
-        }
-        res.status(200).json(user);
-    }catch(err){
-        res.status(500).json({message:"Error in getting user info",error:err.message});
+  try {
+    const user = await User.findOne({ email });
+    if (!user || !(await user.comparePassword(password))) {
+      return res.status(400).json({ message: "Invalid credentials" });
     }
+
+    const otp = generateOtp();
+    const otpExpires = Date.now() + 5 * 60 * 1000;
+
+    user.otp = otp;
+    user.otpExpires = otpExpires;
+    await user.save();
+
+    await sendOtp(email, otp);
+
+    res.status(200).json({
+      message: "OTP sent to your email. Please verify to continue.",
+      user: {
+        _id: user._id,
+        fullname: user.fullname,
+        email: user.email,
+        profileImageUrl: user.profileImageUrl  // 
+      }
+    });
+
+  } catch (err) {
+    res.status(500).json({ message: "Error in login", error: err.message });
+  }
+};
+
+
+exports.getUserInfo = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json({ message: "Error in getting user info", error: err.message });
+  }
 }
 

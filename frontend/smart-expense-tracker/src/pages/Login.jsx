@@ -4,7 +4,7 @@ import AuthLayout from '../components/layouts/AuthLayout';
 import Input from '../components/inputs/input';
 import { validateEmail } from '../utils/helper';
 import axiosInstance from '../utils/axiosInstance'; 
-import { API_PATHS } from '../utils/apiPaths';
+import { API_PATHS, BASE_URL } from '../utils/apiPaths';
 import { UserContext } from '../context/UserContext';
 
 const Login = () => {
@@ -17,36 +17,31 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    if (!validateEmail(email)) {
-      setError('Please enter a valid email address');
-      return;
-    }
-    if (!password) {
-      setError('Please enter your password');
-      return;
-    }
-    setError('');
-    setLoading(true); // 🔹 show loading
+  e.preventDefault();
+  setLoading(true);
 
-    try {
-      const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
-        email,
-        password,
-      });
+  try {
+    const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, { email, password });
+    const loggedInUser = response.data.user;
 
-      // Expect: message and userId (no token/user yet)
-      navigate('/verify-otp', { state: { email } });
-    } catch (error) {
-      if (error.response && error.response.data.message) {
-        setError(error.response.data.message);
-      } else {
-        setError('Something went wrong, please try again later');
-      }
-    } finally {
-      setLoading(false); // 🔹 hide loading
+    // Ensure profileImageUrl is absolute
+    const backendURL = BASE_URL;
+    if (loggedInUser.profileImageUrl && !loggedInUser.profileImageUrl.startsWith("https")) {
+      loggedInUser.profileImageUrl = `${backendURL}/uploads/${loggedInUser.profileImageUrl}`;
     }
-  };
+
+    localStorage.setItem("user", JSON.stringify(loggedInUser));
+    updateUser(loggedInUser); // UserContext update
+
+    navigate("/verify-otp", { state: { email } });
+
+  } catch (err) {
+    setError(err.response?.data?.message || "Something went wrong");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <AuthLayout>
