@@ -1,18 +1,12 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-//const { sendOtp, generateOtp } = require('../utils/sendOtp');
-// backend/controllers/authController.js
 const { generateOtp, sendOtp } = require('../utils/emailService');
-
-//const { sendOtp, generateOtp } = require('../utils/sendOtp'); // Import OTP functions
 
 
 const generatetoken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1h" })
 }
 
-
-// controllers/authController.js
 
 exports.registerUser = async (req, res) => {
   const { fullname, email, password, profileImageUrl } = req.body;
