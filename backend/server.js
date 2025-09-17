@@ -12,22 +12,34 @@ const expenseRoutes = require('./routes/expenseRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 
 const allowedOrigins = [
-  process.env.CLIENT_URL, // main prod domain
-  "https://expense-tracker-rhaq7s9fj-mohammad-alis-projects-fb6f6f34.vercel.app", // your current vercel deploy
+  process.env.CLIENT_URL, // your main production domain from .env
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
+    if (!origin) {
+      // Allow requests with no origin (like mobile apps, Postman)
+      return callback(null, true);
     }
+
+    // Allow if in allowedOrigins
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    // Allow any *.vercel.app domain
+    if (/\.vercel\.app$/.test(origin)) {
+      return callback(null, true);
+    }
+
+    // Otherwise block
+    return callback(new Error("Not allowed by CORS: " + origin));
   },
-  methods: ["GET","POST","PUT","DELETE"],
-  allowedHeaders: ["Content-Type","Authorization"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
 }));
+
 
 
 app.use(express.json());
