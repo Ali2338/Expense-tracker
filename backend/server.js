@@ -10,11 +10,25 @@ const authRoutes = require('./routes/authRoutes');
 const incomeRoutes = require('./routes/incomeRoutes');
 const expenseRoutes = require('./routes/expenseRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
+
+const allowedOrigins = [
+  process.env.CLIENT_URL, // main prod domain
+  "https://expense-tracker-rhaq7s9fj-mohammad-alis-projects-fb6f6f34.vercel.app", // your current vercel deploy
+];
+
 app.use(cors({
-    origin: process.env.CLIENT_URL || "*",
-    methods: ["GET","POST","PUT","DELETE"],
-    allowedHeaders:["Content-Type","Authorization"],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET","POST","PUT","DELETE"],
+  allowedHeaders: ["Content-Type","Authorization"],
+  credentials: true
 }));
+
 
 app.use(express.json());
 app.use(cookieParser());
