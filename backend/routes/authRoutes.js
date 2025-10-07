@@ -18,7 +18,7 @@ router.post("/upload-image", upload.single('image'), (req, res) => {
     return res.status(400).json({ message: "No file uploaded" });
   }
 
-  const backendURL = "https://expense-tracker-nnmw.onrender.com" || `${req.protocol}://${req.get('host')}`;
+  const backendURL = process.env.BACKEND_URL || `${req.protocol}://${req.get("host")}`;g
   const imageUrl = `${backendURL}/uploads/${req.file.filename}`;
 
   res.status(200).json({ imageUrl });
