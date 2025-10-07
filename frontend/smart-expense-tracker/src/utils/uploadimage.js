@@ -10,6 +10,7 @@ const uploadImage = async (image) => {
         const response = await axiosInstance.post(API_PATHS.IMAGE.UPLOAD_IMAGE, formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
+                "timeout": 60000,
             },
         });
         return response.data;
