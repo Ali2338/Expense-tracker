@@ -18,27 +18,36 @@ const allowedOrigins = [
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin) {
-      // Allow requests with no origin (like mobile apps, Postman)
+      // Allow requests with no origin (Postman, mobile, etc.)
       return callback(null, true);
     }
 
-    // Allow if in allowedOrigins
+    // Allow specific frontend domain from .env
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
 
-    // Allow any *.vercel.app domain
+    // Allow all Vercel subdomains (your frontend deploys)
     if (/\.vercel\.app$/.test(origin)) {
       return callback(null, true);
     }
 
-    // Otherwise block
+    // Otherwise block the origin
     return callback(new Error("Not allowed by CORS: " + origin));
   },
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
+
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // include OPTIONS for preflight
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "timeout",
+    "Accept",
+    "Origin",
+    "X-Requested-With",
+  ],
+  credentials: true,
 }));
+
 
 
 
