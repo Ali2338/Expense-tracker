@@ -6,12 +6,15 @@ const generateOtp = () => crypto.randomInt(100000, 999999).toString();
 
 // Configure Brevo (Sendinblue) SMTP transporter
 const transporter = nodemailer.createTransport({
-  host: "smtp-relay.brevo.com",
-  port: 587, // TLS port
-  secure: false, // use STARTTLS instead of SSL
+  host: process.env.EMAIL_HOST || "smtp-relay.brevo.com",
+  port: parseInt(process.env.EMAIL_PORT) || 587,
+  secure: false, // must be false for port 587
   auth: {
-    user: process.env.EMAIL_USER, // your Brevo account email
-    pass: process.env.EMAIL_PASS, // your Brevo SMTP key
+    user: process.env.EMAIL_USER, // Brevo SMTP login
+    pass: process.env.EMAIL_PASS, // Brevo SMTP key
+  },
+  tls: {
+    rejectUnauthorized: false, // ⚠️ needed for Render environments
   },
 });
 
