@@ -8,9 +8,9 @@ const generatetoken = (id) => {
 }
 
 
+// ✅ Improved version for Render + Gmail reliability
 exports.registerUser = async (req, res) => {
   const { fullname, email, password, profileImageUrl } = req.body;
-  //console.log("Incoming registration data:", req.body);
 
   if (!fullname || !email || !password) {
     return res.status(400).json({ message: "Please fill all fields" });
@@ -31,33 +31,37 @@ exports.registerUser = async (req, res) => {
       password,
       profileImageUrl,
       otp,
-      otpExpires
+      otpExpires,
     });
 
-    // TRY-CATCH AROUND EMAIL SEND
-    try {
-      await sendOtp(email, otp);
-    } catch (emailErr) {
-      console.error("Failed to send OTP:", emailErr);
-      return res.status(500).json({ message: "OTP send failed", error: emailErr.message });
-    }
+    // ✅ Send response first to prevent timeout
+    res.status(201).json({
+      message: "OTP is being sent to your email.",
+      userId: user._id,
+    });
 
-    res.status(201).json({ message: "OTP sent to your email. Please verify to complete registration.", userId: user._id });
+    // 🔄 Send OTP in background (non-blocking)
+    sendOtp(email, otp).catch((err) =>
+      console.error("❌ OTP send failed:", err)
+    );
 
   } catch (err) {
-    console.error("Registration error:", err);  // LOG FULL ERROR
+    console.error("Registration error:", err);
     res.status(500).json({ message: "Error in registration", error: err.message });
   }
 };
 
+
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
+
   if (!email || !password) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
   try {
     const user = await User.findOne({ email });
+
     if (!user || !(await user.comparePassword(password))) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
@@ -69,22 +73,28 @@ exports.loginUser = async (req, res) => {
     user.otpExpires = otpExpires;
     await user.save();
 
-    await sendOtp(email, otp);
-
+    // ✅ Respond immediately to avoid timeout
     res.status(200).json({
-      message: "OTP sent to your email. Please verify to continue.",
+      message: "OTP is being sent to your email.",
       user: {
         _id: user._id,
         fullname: user.fullname,
         email: user.email,
-        profileImageUrl: user.profileImageUrl  // 
-      }
+        profileImageUrl: user.profileImageUrl,
+      },
     });
 
+    // 🔄 Send OTP in background (non-blocking)
+    sendOtp(email, otp).catch((err) =>
+      console.error("❌ OTP send failed:", err)
+    );
+
   } catch (err) {
+    console.error("Login error:", err);
     res.status(500).json({ message: "Error in login", error: err.message });
   }
 };
+
 
 
 exports.getUserInfo = async (req, res) => {
