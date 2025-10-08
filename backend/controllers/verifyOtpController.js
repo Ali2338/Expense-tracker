@@ -37,4 +37,4 @@ const verifyOtp = async (req, res) => {
 };
 
 // ✅ Export directly as a function
-module.exports = verifyOtp;
+module.exports = {verifyOtp};
