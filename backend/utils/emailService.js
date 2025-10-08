@@ -1,25 +1,26 @@
-// backend/utils/emailService.js
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 
 // Generate a 6-digit OTP
 const generateOtp = () => crypto.randomInt(100000, 999999).toString();
 
-// Configure Gmail transporter
+// Configure Brevo (Sendinblue) SMTP transporter
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp-relay.brevo.com",
+  port: 587, // TLS port
+  secure: false, // use STARTTLS instead of SSL
   auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS,
+    user: process.env.EMAIL_USER, // your Brevo account email
+    pass: process.env.EMAIL_PASS, // your Brevo SMTP key
   },
 });
 
 // Send OTP email
 const sendOtp = async (email, otp) => {
-  console.log(`📧 Sending OTP via Gmail to: ${email}, OTP: ${otp}`);
+  console.log(`📧 Sending OTP via Brevo to: ${email}, OTP: ${otp}`);
 
   const mailOptions = {
-    from: `"Smart Expense Tracker" <${process.env.GMAIL_USER}>`,
+    from: `"Smart Expense Tracker" <${process.env.EMAIL_USER}>`,
     to: email,
     subject: "Your OTP Code - Smart Expense Tracker",
     html: `
@@ -29,15 +30,15 @@ const sendOtp = async (email, otp) => {
       <h2 style="color:#2e86de;">${otp}</h2>
       <p>This OTP is valid for 5 minutes. Please do not share it with anyone.</p>
       <br/>
-      <small>Sent securely from Smart Expense Tracker</small>
+      <small>Sent securely via Brevo SMTP</small>
     `,
   };
 
   try {
     await transporter.sendMail(mailOptions);
-    console.log("✅ OTP sent successfully via Gmail");
+    console.log("✅ OTP sent successfully via Brevo");
   } catch (error) {
-    console.error("❌ Failed to send OTP via Gmail:", error);
+    console.error("❌ Failed to send OTP via Brevo:", error);
     throw new Error("Email send failed");
   }
 };
