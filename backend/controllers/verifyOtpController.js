@@ -1,44 +1,34 @@
-const nodemailer = require("nodemailer");
-const crypto = require("crypto");
+const User = require("../models/User");
+const jwt = require("jsonwebtoken");
 
-// Generate a 6-digit OTP
-const generateOtp = () => crypto.randomInt(100000, 999999).toString();
-
-// Configure Gmail transporter
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS,
-  },
-});
-
-// Send OTP email
-const sendOtp = async (email, otp) => {
-  console.log(`📧 Sending OTP via Gmail to: ${email}, OTP: ${otp}`);
-
-  const mailOptions = {
-    from: `"Smart Expense Tracker" <${process.env.GMAIL_USER}>`,
-    to: email,
-    subject: "Your OTP Code - Smart Expense Tracker",
-    html: `
-      <h3>Smart Expense Tracker - OTP Verification</h3>
-      <p>Hello,</p>
-      <p>Your One-Time Password is:</p>
-      <h2 style="color:#2e86de;">${otp}</h2>
-      <p>This OTP is valid for 5 minutes. Please do not share it with anyone.</p>
-      <br/>
-      <small>Sent securely from Smart Expense Tracker</small>
-    `,
-  };
+const verifyOtp = async (req, res) => {
+  const { email, otp } = req.body;
 
   try {
-    await transporter.sendMail(mailOptions);
-    console.log("✅ OTP sent successfully via Gmail");
-  } catch (error) {
-    console.error("❌ Failed to send OTP via Gmail:", error);
-    throw new Error("Email send failed");
+    console.log("📩 Received OTP verification request for:", email);
+
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ message: "User not found" });
+
+    if (user.otp !== otp || Date.now() > user.otpExpires) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    // Clear OTP
+    user.otp = undefined;
+    user.otpExpires = undefined;
+    await user.save();
+
+    // Generate token
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    res.status(200).json({ message: "OTP verified successfully", token, user });
+  } catch (err) {
+    console.error("❌ Error in OTP verification:", err);
+    res.status(500).json({ message: "OTP verification failed", error: err.message });
   }
 };
 
-module.exports = { generateOtp, sendOtp };
+module.exports = verifyOtp;
