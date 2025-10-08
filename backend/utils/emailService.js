@@ -11,7 +11,7 @@ const sendOtp = async (email, otp) => {
   const brevoApiKey = process.env.BREVO_API_KEY;
 
   const data = {
-    sender: { name: "Smart Expense Tracker", email: "rebook@arhaankhan122334@gmail.com" },
+    sender: { name: "Smart Expense Tracker", email: "arhaankhan122334@gmail.com" },
     to: [{ email }],
     subject: "Your OTP Code - Smart Expense Tracker",
     htmlContent: `
