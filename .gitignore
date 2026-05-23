@@ -1,0 +1,59 @@
+# ====================================================================
+# 🐍 Python / Django Exclusions
+# ====================================================================
+# Ignore the Python virtual environment folder
+env/
+venv/
+.venv/
+
+# Compiled Python files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Django local database (keep your transaction test data private)
+db.sqlite3
+
+# Django media and static collected assets
+/static/
+/media/
+
+
+# ====================================================================
+# ⚛️ React / Frontend (Vite) Exclusions
+# ====================================================================
+# Ignore the massive React dependencies folder
+frontend/node_modules/
+
+# Ignore local frontend build outputs
+frontend/dist/
+frontend/build/
+
+# Vite local logs and debug dumps
+frontend/.eslintcache
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
+# ====================================================================
+# 🔑 Security & Environment Secret Keys
+# ====================================================================
+# Critical: Never upload your secret keys or API configurations
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+
+# ====================================================================
+# 💻 System / IDE Exclusions
+# ====================================================================
+# VS Code, WebStorm, and operating system junk files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
