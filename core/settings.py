@@ -47,7 +47,14 @@ MIDDLEWARE = [
 CORS_ALLOWED_CREDENTIALS = True
 
 # 1. Explicitly permit local host headers [cite: 13]
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+# core/settings.py
+
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'ledgerflow-backend-nobr.onrender.com',  # 👈 Add your exact Render URL here
+    '.onrender.com',                         # This wildcard catches any Render subdomains too
+]
 
 # 2. Update your whitelist to completely eliminate spacing issues [cite: 37-40]
 CORS_ALLOWED_ORIGINS = [
