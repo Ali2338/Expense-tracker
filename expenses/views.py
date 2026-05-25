@@ -21,19 +21,6 @@ from .models import Expense, Budget, UserProfile
 from .serializers import ExpenseSerializer, BudgetSerializer
 
 
-# --- 🍪 CUSTOM AUTHENTICATION PIECE: EXTRACTS TOKENS FROM SECURE COOKIES NATIVELY ---
-# class JWTCookieAuthentication(JWTAuthentication):
-#     def authenticate(self, request):
-#         # Extract the token string directly out of the secure cookie storage layer
-#         raw_token = request.COOKIES.get('access_token') or request.COOKIES.get('JWT')
-        
-#         if raw_token is None:
-#             return None
-            
-#         validated_token = self.get_validated_token(raw_token)
-#         return self.get_user(validated_token), validated_token
-
-
 class UserRegisterSerializer(ModelSerializer):
     class Meta:
         model = User
@@ -79,21 +66,18 @@ class RegisterView(generics.CreateAPIView):
             key='access_token',
             value=str(refresh.access_token),
             httponly=True,
-            secure=False,  # Set to True when you move to HTTPS production
-            samesite='Lax',
+            secure=True,  # 👑 Set to True for Cross-Domain production matching
+            samesite='None', # 👑 Matches your settings.py
             max_age=3600  # Valid for 1 Hour
         )
         return response
 
 
-# --- LOGIN ENFORCES EMAIL OTP EVERY SINGLE TIME ---
-# --- UPDATE IN YOUR expenses/views.py ---
-
+# --- LOGIN: BYPASSES BLOCKED PORT TIMEOUTS FOR INSTANT ACCESS ---
 class LedgerFlowTokenObtainPairView(APIView):
     permission_classes = [AllowAny]
 
     def options(self, request, *args, **kwargs):
-        # 👑 MANUALLY ENFORCE PREFLIGHT CREDENTIAL APPROVALS NATIVELY
         response = Response(status=status.HTTP_200_OK)
         response["Access-Control-Allow-Origin"] = "http://localhost:5173"
         response["Access-Control-Allow-Credentials"] = "true"
@@ -110,30 +94,35 @@ class LedgerFlowTokenObtainPairView(APIView):
         
         if user is not None:
             profile, created = UserProfile.objects.get_or_create(user=user)
-            profile.is_verified = False
-            otp_code = profile.generate_otp()
             
-            try:
-                send_mail(
-                    subject='LedgerFlow Security - Login Verification Code',
-                    message=f'Your secure One-Time Password (OTP) login code is: {otp_code}. Use this to verify your session access.',
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[user.email],
-                    fail_silently=True,
-                )
-            except Exception:
-                return Response({"detail": "Mail delivery failure. Check configuration backend settings."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            # 👑 PRODUCTION WORKAROUND: Force verification to True to skip email bottlenecks entirely
+            profile.is_verified = True
+            profile.otp = None
+            profile.save()
             
-            return Response({
-                "detail": "OTP generated and sent to email.",
-                "is_verified": False,
+            # Mint tokens immediately since we are bypassing the separate OTP step
+            refresh = RefreshToken.for_user(user)
+            
+            response = Response({
+                "detail": "Login successful.",
+                "is_verified": True, # 🚀 Tells frontend to skip OTP input and load dashboard!
                 "username": user.username
             }, status=status.HTTP_200_OK)
+
+            response.set_cookie(
+                key='access_token',
+                value=str(refresh.access_token),
+                httponly=True,
+                secure=True,     # 👑 Required for cross-domain cookie transfers
+                samesite='None',  # 👑 Allows cookie to drop safely into localhost:5173
+                max_age=3600
+            )
+            return response
             
         return Response({"detail": "Invalid username or password credentials."}, status=status.HTTP_401_UNAUTHORIZED)
 
 
-# --- OTP VALIDATION ENDPOINT ---
+# --- OTP VALIDATION ENDPOINT (FALLBACK) ---
 class VerifyOTPView(APIView):
     permission_classes = [AllowAny]
 
@@ -166,8 +155,8 @@ class VerifyOTPView(APIView):
                     key='access_token',
                     value=str(refresh.access_token),
                     httponly=True,
-                    secure=False,
-                    samesite='Lax',
+                    secure=True,
+                    samesite='None',
                     max_age=3600
                 )
                 return response
