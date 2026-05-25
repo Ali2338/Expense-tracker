@@ -40,7 +40,7 @@ INSTALLED_APPS = [
 # 👑 Fixed Middlewares: WhiteNoise is now placed strictly below SecurityMiddleware
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
-    'expenses.cors_middleware.BulletproofCorsMiddleware',  
+    # 'expenses.cors_middleware.BulletproofCorsMiddleware',  
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # 👈 Crucial position for static styles
     'django.contrib.sessions.middleware.SessionMiddleware',
