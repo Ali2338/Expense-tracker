@@ -20,7 +20,7 @@ function Login({ onLoginSuccess, switchToRegister }) {
       
       // 👑 FIX: Trigger success if verified is true OR false
       if (res.data.is_verified === true || res.data.is_verified === false) {
-        onLoginSuccess(username); 
+        onLoginSuccess(username,res.data.is_verified); 
       }
     } catch (err) {
       setIsLoading(false);

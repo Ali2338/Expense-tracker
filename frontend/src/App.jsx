@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Login from './features/auth/Login';
 import Register from './features/auth/Register';
-// 👑 FIXED: Casing matched perfectly to your file system structure (OTPVerification.jsx)
 import OTPVerificationScreen from "./features/auth/OTPVerificationScreen"; 
 import ExpenseTracker from './features/dashboard/ExpenseTracker';
 import InteractiveBackground from './components/InteractiveBackground';
@@ -11,7 +10,6 @@ function App() {
   const [pendingUsername, setPendingUsername] = useState('');
 
   const handleLogout = () => {
-    // Drop fallback states safely back to initial account gate
     setAuthStage('login');
     setPendingUsername('');
   };
@@ -20,15 +18,18 @@ function App() {
     <div className="min-h-screen p-0 md:p-6 relative font-sans text-slate-800 dark:text-slate-100 transition-colors duration-300">
       <InteractiveBackground />
 
-      {/* 👑 REMOVED: The global floating top-right theme switcher button block has been completely deleted from here */}
-
       {/* CORE ROUTING PIPELINE GATEWAY */}
       <div className="relative w-full">
         {authStage === 'login' && (
           <Login
-            onLoginSuccess={(user) => {
+            // 👑 UPDATE: Receive both username and verification status from Login.jsx
+            onLoginSuccess={(user, isVerified) => {
               setPendingUsername(user);
-              setAuthStage('otp');
+              if (isVerified === true) {
+                setAuthStage('dashboard'); // 🚀 If verified already, jump straight to dashboard!
+              } else {
+                setAuthStage('otp');       // Fallback to OTP screen if email works later
+              }
             }}
             switchToRegister={() => setAuthStage('register')}
           />
