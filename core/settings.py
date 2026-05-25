@@ -65,6 +65,22 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
 
 ROOT_URLCONF = 'core.urls'
 
+# 🚀 ADD THESE COOKIE CONFIGURATIONS BELOW 'ROOT_URLCONF'
+# This relaxes cookie sharing restrictions across different domains
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
+
+# This ensures cookies travel securely over HTTPS to Render
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+# Explicitly trust your local frontend for secure data requests
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://ledgerflow-backend-nobr.onrender.com"
+]
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
