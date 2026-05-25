@@ -18,7 +18,8 @@ function Login({ onLoginSuccess, switchToRegister }) {
       const res = await API.post('/login/', { username, password });
       setIsLoading(false);
       
-      if (res.data.is_verified === false) {
+      // 👑 FIX: Trigger success if verified is true OR false
+      if (res.data.is_verified === true || res.data.is_verified === false) {
         onLoginSuccess(username); 
       }
     } catch (err) {
