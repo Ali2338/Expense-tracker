@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const API = axios.create({
-  // 🔥 SWITCH THIS FROM 127.0.0.1 TO localhost TO MATCH ORIGIN EXPECTATIONS
-  baseURL: 'http://localhost:8000/api', 
+  // 🚀 Pointing directly to your live production Render backend
+  baseURL: 'https://ledgerflow-backend-nobr.onrender.com/api', 
   withCredentials: true 
 });
 
