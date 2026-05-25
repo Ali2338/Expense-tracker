@@ -11,7 +11,7 @@ import dj_database_url  # 👑 Added for Render PostgreSQL connectivity
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-x(m9w_n%*u5+0%8gawk)fl)$t*wzp#o*z-t8#v9^2@45@$#n2t')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-x(m9w_n%*u5+0%8gawk)fl)$t*wzp#o*z-t8#v9^2@45@$#n2thasbeenstrengthenedto32bytesplus!')
 
 # Automatically switches to False on Render if you set DJANGO_DEBUG=False in environment variables
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
