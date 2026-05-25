@@ -119,7 +119,7 @@ class LedgerFlowTokenObtainPairView(APIView):
                     message=f'Your secure One-Time Password (OTP) login code is: {otp_code}. Use this to verify your session access.',
                     from_email=settings.DEFAULT_FROM_EMAIL,
                     recipient_list=[user.email],
-                    fail_silently=False,
+                    fail_silently=True,
                 )
             except Exception:
                 return Response({"detail": "Mail delivery failure. Check configuration backend settings."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
