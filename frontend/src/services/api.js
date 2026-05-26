@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const API = axios.create({
-  // 🚀 Pointing directly to your live production Render backend
-  baseURL: 'https://ledgerflow-backend-nobr.onrender.com/api', 
+  // 🚀 Tries to read the Vercel variable first; falls back to localhost if missing
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api', 
   withCredentials: true 
 });
 
