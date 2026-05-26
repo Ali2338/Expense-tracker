@@ -25,12 +25,11 @@ class Expense(models.Model):
     ]
     
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='expenses')
-    # Change max_value to max_length right here:
     title = models.CharField(max_length=255) 
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     date = models.DateField()
-    category = models.CharField(max_length=100) # Check this line too! Change to max_length=100
-    type = models.CharField(max_length=10, choices=TYPE_CHOICES, default='EXPENSE') # Change to max_length=10
+    category = models.CharField(max_length=100) 
+    type = models.CharField(max_length=10, choices=TYPE_CHOICES, default='EXPENSE') 
 
     def __str__(self):
         return f"{self.title} - {self.amount} ({self.type})"
@@ -42,7 +41,6 @@ class Budget(models.Model):
     limit = models.DecimalField(max_digits=12, decimal_places=2)
 
     class Meta:
-        # Prevents a user from creating multiple conflicting budgets for the same category
         unique_together = ('user', 'category')
 
     def __str__(self):

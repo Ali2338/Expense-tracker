@@ -14,7 +14,7 @@ from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-# Simple JWT tokens helper to manually mint access tokens upon registration or OTP success
+
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import Expense, Budget, UserProfile
@@ -37,7 +37,6 @@ class UserRegisterSerializer(ModelSerializer):
         return user
 
 
-# --- REGISTRATION: AUTOMATICALLY MINTS VALID SESSION SIGNATURES ---
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserRegisterSerializer
@@ -61,25 +60,22 @@ class RegisterView(generics.CreateAPIView):
             "detail": "Registration successful. Welcome to your dashboard!"
         }, status=status.HTTP_201_CREATED)
 
-        # BAKE TOKENS DIRECTLY INTO SECURE COOKIES
         response.set_cookie(
             key='access_token',
             value=str(refresh.access_token),
             httponly=True,
-            secure=True,  # 👑 Set to True for Cross-Domain production matching
-            samesite='None', # 👑 Matches your settings.py
-            max_age=3600  # Valid for 1 Hour
+            secure=True,  
+            samesite='None', 
+            max_age=3600  
         )
         return response
 
 
-# --- LOGIN: BYPASSES BLOCKED PORT TIMEOUTS FOR INSTANT ACCESS ---
 class LedgerFlowTokenObtainPairView(APIView):
     permission_classes = [AllowAny]
 
     def options(self, request, *args, **kwargs):
         response = Response(status=status.HTTP_200_OK)
-        # 👑 Update this header dynamically or set it to match your live Vercel domain
         response["Access-Control-Allow-Origin"] = "https://expense-tracker-ten-beige-98.vercel.app"
         response["Access-Control-Allow-Credentials"] = "true"
         response["Access-Control-Allow-Headers"] = "content-type, authorization, x-csrftoken"
@@ -96,17 +92,15 @@ class LedgerFlowTokenObtainPairView(APIView):
         if user is not None:
             profile, created = UserProfile.objects.get_or_create(user=user)
             
-            # 👑 PRODUCTION WORKAROUND: Force verification to True to skip email bottlenecks entirely
             profile.is_verified = True
             profile.otp = None
             profile.save()
             
-            # Mint tokens immediately since we are bypassing the separate OTP step
             refresh = RefreshToken.for_user(user)
             
             response = Response({
                 "detail": "Login successful.",
-                "is_verified": True, # 🚀 Tells frontend to skip OTP input and load dashboard!
+                "is_verified": True, 
                 "username": user.username
             }, status=status.HTTP_200_OK)
 
@@ -114,8 +108,8 @@ class LedgerFlowTokenObtainPairView(APIView):
                 key='access_token',
                 value=str(refresh.access_token),
                 httponly=True,
-                secure=True,     # 👑 Required for cross-domain cookie transfers
-                samesite='None',  # 👑 Allows cookie to drop safely into localhost:5173
+                secure=True,     
+                samesite='None',  
                 max_age=3600
             )
             return response
@@ -123,7 +117,6 @@ class LedgerFlowTokenObtainPairView(APIView):
         return Response({"detail": "Invalid username or password credentials."}, status=status.HTTP_401_UNAUTHORIZED)
 
 
-# --- OTP VALIDATION ENDPOINT (FALLBACK) ---
 class VerifyOTPView(APIView):
     permission_classes = [AllowAny]
 
@@ -168,7 +161,6 @@ class VerifyOTPView(APIView):
             return Response({"detail": "User target scope validation error."}, status=status.HTTP_440_LOGIN_TIMEOUT)
 
 
-# --- FINANCIAL DATA CORE TRANSACTIONS WORKSPACE ---
 class ExpenseViewSet(viewsets.ModelViewSet):
     serializer_class = ExpenseSerializer
     permission_classes = [IsAuthenticated]

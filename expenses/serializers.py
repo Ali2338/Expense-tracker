@@ -4,7 +4,6 @@ from .models import Expense,Budget
 class ExpenseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Expense
-        # Explicitly match the fields defined on your Model schema
         fields = ['id', 'title', 'amount', 'date', 'category', 'type']
 
     def validate(self, data):
