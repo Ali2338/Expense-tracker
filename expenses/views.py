@@ -79,7 +79,8 @@ class LedgerFlowTokenObtainPairView(APIView):
 
     def options(self, request, *args, **kwargs):
         response = Response(status=status.HTTP_200_OK)
-        response["Access-Control-Allow-Origin"] = "http://localhost:5173"
+        # 👑 Update this header dynamically or set it to match your live Vercel domain
+        response["Access-Control-Allow-Origin"] = "https://expense-tracker-ten-beige-98.vercel.app"
         response["Access-Control-Allow-Credentials"] = "true"
         response["Access-Control-Allow-Headers"] = "content-type, authorization, x-csrftoken"
         response["Access-Control-Allow-Methods"] = "POST, OPTIONS"

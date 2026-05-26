@@ -53,19 +53,21 @@ MIDDLEWARE = [
 
 # core/settings.py
 
-# 👑 FIX 1: Change from CORS_ALLOWED_CREDENTIALS to CORS_ALLOW_CREDENTIALS
+# core/settings.py
+
 CORS_ALLOW_CREDENTIALS = True
 
-# 👑 FIX 2: Change from CORS_ALLOWED_ORIGINS to CORS_ALLOWED_ORIGINS
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "https://expense-tracker-ten-beige-98.vercel.app",  # 👑 ADDED YOUR LIVE VERCEL FRONTEND
 ]
 
-# Keep your regexes as fallback matching strings
+# Add a regex fallback to catch any preview deployments Vercel creates for you later
 CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^http://localhost:\d+$",
     r"^http://127\.0\.0\.1:\d+$",  
+    r"^https:\/\/expense-tracker-.*\.vercel\.app$", # 🚀 Automatically trusts all your Vercel subdomains!
 ]
 
 ROOT_URLCONF = 'core.urls'
