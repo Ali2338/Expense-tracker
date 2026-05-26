@@ -1,16 +1,38 @@
-# React + Vite
+# LedgerFlow - Frontend Client Interface
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This directory houses the user interface for LedgerFlow, a modern, responsive personal finance tracking dashboard. Built using React and Vite, this application focuses on high-performance rendering, dynamic data visualization, and secure session management.
 
-Currently, two official plugins are available:
+## 🚀 Key Client Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+* **Vite-Powered HMR:** Lightning-fast Hot Module Replacement during development for rapid UI tuning.
+* **Component-Driven UI:** Modular architecture built using clean React functional components.
+* **Modern Interface Elements:** Dynamic dashboard design stylized with **Tailwind CSS** and crisp interface icons from **Lucide React**.
+* **Global Routing Gate:** Dynamic client-side routing pipeline (`App.jsx`) that smoothly transitions between Register, Login, and Dashboard layouts based on backend verification responses.
+* **Secure Session Handshakes:** Custom Axios instance config configured with `withCredentials: true` to handle secure cross-origin HTTP-Only token storage securely.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Local Tech Stack
 
-## Expanding the ESLint configuration
+* **Core Engine:** React 18+ / Vite
+* **Styling Framework:** Tailwind CSS
+* **Iconography:** Lucide React
+* **API Client:** Axios 
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 💻 Getting Started Locally
+
+1. Ensure you have Node.js installed on your system.
+2. Open your terminal and navigate to this folder:
+   ```powershell
+   cd frontend
+3. Install all optimization and asset dependencies:
+
+   ```powershell
+   npm install
+4. Fire up the local Vite development web server:
+
+   ```powershell
+   npm run dev
+5. Open your browser to http://localhost:5173/ to see the live system interface connected to your running Django backend!
