@@ -6,7 +6,7 @@ import ExpenseTracker from './features/dashboard/ExpenseTracker';
 import InteractiveBackground from './components/InteractiveBackground';
 
 function App() {
-  const [authStage, setAuthStage] = useState('login'); // Stages: 'login', 'register', 'otp', 'dashboard'
+  const [authStage, setAuthStage] = useState('login');
   const [pendingUsername, setPendingUsername] = useState('');
 
   const handleLogout = () => {
@@ -18,17 +18,15 @@ function App() {
     <div className="min-h-screen p-0 md:p-6 relative font-sans text-slate-800 dark:text-slate-100 transition-colors duration-300">
       <InteractiveBackground />
 
-      {/* CORE ROUTING PIPELINE GATEWAY */}
       <div className="relative w-full">
         {authStage === 'login' && (
           <Login
-            // 👑 UPDATE: Receive both username and verification status from Login.jsx
             onLoginSuccess={(user, isVerified) => {
               setPendingUsername(user);
               if (isVerified === true) {
-                setAuthStage('dashboard'); // 🚀 If verified already, jump straight to dashboard!
+                setAuthStage('dashboard'); 
               } else {
-                setAuthStage('otp');       // Fallback to OTP screen if email works later
+                setAuthStage('otp');       
               }
             }}
             switchToRegister={() => setAuthStage('register')}

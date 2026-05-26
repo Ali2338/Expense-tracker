@@ -23,7 +23,6 @@ function IncomePage({ incomeRecords, incomeChartData, onLogTransaction, onDelete
         <p className="text-slate-400 text-xs mt-0.5">Log your salary, freelance earnings, and investment returns.</p>
       </div>
 
-      {/* 👑 ADAPTIVE LAYOUT MATRIX: Stacks vertically on mobile/tablets, changes into columns on desktop */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-start w-full">
 
         {/* Input Form Panel Wrapper */}

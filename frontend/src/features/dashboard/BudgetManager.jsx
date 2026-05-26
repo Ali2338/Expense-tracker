@@ -46,7 +46,6 @@ function BudgetManager({ expensePieData, onBudgetChange }) {
 
   return (
     <div className="space-y-6 animate-fadeIn w-full box-border">
-      {/* 👑 DYNAMIC COLUMNS: Stacks beautifully on portable screens and grid-aligns on large viewports */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start w-full">
         
         {/* Form Limit Creator Panel */}

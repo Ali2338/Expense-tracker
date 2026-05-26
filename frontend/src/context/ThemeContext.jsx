@@ -8,16 +8,15 @@ export function ThemeProvider({ children }) {
   });
 
   useEffect(() => {
-    // Target the absolute HTML root element directly
     const html = document.documentElement;
     
     if (isDark) {
       html.classList.add('dark');
-      html.style.backgroundColor = '#020617'; // Forces light mode windows to shift black instantly
+      html.style.backgroundColor = '#020617'; 
       localStorage.setItem('theme', 'dark');
     } else {
       html.classList.remove('dark');
-      html.style.backgroundColor = '#f8fafc'; // Forces dark mode windows to shift white instantly
+      html.style.backgroundColor = '#f8fafc'; 
       localStorage.setItem('theme', 'light');
     }
   }, [isDark]);

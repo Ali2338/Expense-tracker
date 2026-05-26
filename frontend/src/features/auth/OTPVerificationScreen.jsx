@@ -42,7 +42,6 @@ function OTPVerificationScreen({ username, onVerificationSuccess, onLogout }) {
   };
 
   return (
-    // 👑 CONTAINER OVERHAUL: Full padding bounds tracking layout fixes
     <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 sm:p-6 text-slate-100 box-border w-full">
       <div className="bg-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-800 shadow-2xl max-w-md w-full space-y-6 text-center animate-fadeIn box-border">
 
@@ -65,7 +64,6 @@ function OTPVerificationScreen({ username, onVerificationSuccess, onLogout }) {
             type="text"
             maxLength="6"
             inputMode="numeric"
-            // 👑 FIXED: Tells the browser engine to expect exactly 6 numerical digits (0-9)
             pattern="[0-9]{6}"
             value={otp}
             onChange={e => setOtp(e.target.value.replace(/\D/g, ""))}

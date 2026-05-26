@@ -25,7 +25,6 @@ function CentralDashboard({ totalIncome, totalExpense, netBalance, mainTimelineD
       </div>
 
       {/* Metrics Layout Grid */}
-      {/* 👑 FIXED GRID CLASS: Using md:grid-cols-3 ensures all three element panels sit in one clean horizontal row on standard desktop screens */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
         
         {/* Income Card */}
@@ -51,7 +50,6 @@ function CentralDashboard({ totalIncome, totalExpense, netBalance, mainTimelineD
         </div>
 
         {/* Net Balance Card */}
-        {/* 👑 FIXED SYNTAX & SPANS: Cleaned out the broken plain-text comment and replaced it with a standard layout span metric block */}
         <div className="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl border border-slate-100 dark:border-slate-800/80 flex items-center justify-between shadow-xs relative overflow-hidden group hover:border-blue-500/30 transition-all col-span-1 sm:col-span-2 md:col-span-1">
           <div className="absolute -top-10 -right-10 w-24 h-24 bg-blue-500/5 rounded-full blur-xl group-hover:bg-blue-500/10 transition-all"></div>
           <div>
@@ -64,7 +62,6 @@ function CentralDashboard({ totalIncome, totalExpense, netBalance, mainTimelineD
         </div>
       </div>
 
-      {/* 📊 CHART CANVAS SECTION: Grid layout drops to 1 column on smaller tablets and mobile screens */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
         
         {/* Chart 1: Income vs Expenses Bar Chart */}

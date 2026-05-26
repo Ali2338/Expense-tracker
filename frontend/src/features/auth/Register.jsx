@@ -35,11 +35,10 @@ function Register({ onRegisterSuccess, switchToLogin }) {
   };
 
   return (
-    // 👑 LOCKED BOUNDS: Limits full page footprint to prevent desktop layout shifting updates
     <div className="h-screen max-h-screen w-full flex items-center justify-center p-0 sm:p-4 selection:bg-emerald-500 selection:text-white box-border w-full overflow-hidden">
       <div className="max-w-4xl w-full bg-white dark:bg-slate-900 rounded-none sm:rounded-3xl shadow-xl border border-slate-100 dark:border-slate-800/60 flex flex-col-reverse md:flex-row-reverse overflow-hidden h-full md:h-[600px]">
         
-        {/* Right Side: Cover Sidebar (Remains locked and sticky) */}
+        {/* Right Side: Cover Sidebar */}
         <div className="hidden md:flex md:w-1/2 relative p-10 flex-col justify-between text-white overflow-hidden bg-slate-950 shrink-0">
           <img 
             src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80" 
@@ -64,7 +63,6 @@ function Register({ onRegisterSuccess, switchToLogin }) {
         </div>
 
         {/* Left Side: Form Panel */}
-        {/* 👑 ISOLATED SCROLL LAYER: Captures scroll parameters safely on mobile and table viewports */}
         <div className="w-full md:w-1/2 p-6 sm:p-8 md:p-12 flex flex-col justify-center bg-white dark:bg-slate-900 h-full overflow-y-auto box-border">
           <div className="mb-6">
             <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Create Account</h2>

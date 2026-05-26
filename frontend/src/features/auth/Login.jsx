@@ -18,7 +18,6 @@ function Login({ onLoginSuccess, switchToRegister }) {
       const res = await API.post('/login/', { username, password });
       setIsLoading(false);
       
-      // 👑 FIX: Trigger success if verified is true OR false
       if (res.data.is_verified === true || res.data.is_verified === false) {
         onLoginSuccess(username,res.data.is_verified); 
       }
@@ -29,12 +28,10 @@ function Login({ onLoginSuccess, switchToRegister }) {
   };
 
   return (
-    // 👑 LOCKED BOUNDS: Prevents the global window from tracking expanding field heights
     <div className="h-screen max-h-screen w-full flex items-center justify-center p-0 sm:p-4 selection:bg-blue-500 selection:text-white box-border overflow-hidden">
-      {/* Container Frame Card */}
+
       <div className="max-w-4xl w-full bg-white dark:bg-slate-900 rounded-none sm:rounded-3xl shadow-xl border border-slate-100 dark:border-slate-800/60 flex flex-col md:flex-row overflow-hidden h-full md:h-[600px]">
         
-        {/* Left Side: Cover Sidebar (Remains locked and sticky) */}
         <div className="hidden md:flex md:w-1/2 relative p-10 flex-col justify-between text-white overflow-hidden bg-slate-950 shrink-0">
           <img 
             src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80" 
@@ -59,7 +56,6 @@ function Login({ onLoginSuccess, switchToRegister }) {
         </div>
 
         {/* Right Side: Dynamic Form Panel */}
-        {/* 👑 ISOLATED SCROLL LAYER: Only this area rolls when sizing clamps active inputs */}
         <div className="w-full md:w-1/2 p-6 sm:p-8 md:p-12 flex flex-col justify-center bg-white dark:bg-slate-900 h-full overflow-y-auto box-border">
           <div className="mb-6">
             <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">

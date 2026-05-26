@@ -75,7 +75,6 @@ function HeroPage({ onNavigate }) {
           <p className="text-[11px] text-slate-400/80">Explore active account tracking tools and services available in your workspace</p>
         </div>
 
-        {/* 👑 ACCORDION RESIZE: Drops from 3 columns down to 2 columns on tablets and 1 column on mobiles */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 w-full">
           <div onClick={() => onNavigate('dashboard')} className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800/80 space-y-3 shadow-xs hover:border-blue-500/40 transition-all duration-300 cursor-pointer group">
             <div className="bg-blue-50 dark:bg-blue-950/40 text-blue-600 p-3 rounded-xl w-fit group-hover:scale-105 transition-transform"><BarChart3 size={22}/></div>

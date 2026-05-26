@@ -8,7 +8,6 @@ import {
 } from 'lucide-react';
 import BudgetManager from './BudgetManager';
 
-// Subpage Component Imports
 import HeroPage from './HeroPage';
 import CentralDashboard from './CentralDashboard';
 import IncomePage from './IncomePage';
@@ -142,7 +141,6 @@ function ExpenseTracker({ onLogout }) {
       </header>
 
       {/* 🖥️ DESKTOP SIDEBAR PANEL LAYOUT */}
-      {/* 👑 FLOATING SIDEBAR UPGRADE: Reduced height using calc, added subtle margin alignments, and soft rounded curves */}
       <aside className="w-64 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 p-5 flex flex-col justify-between hidden md:flex h-[calc(100vh-2rem)] my-4 ml-4 rounded-2xl shadow-xs box-border shrink-0 z-30 sticky top-4">
         <div className="space-y-6">
           <div className="flex items-center gap-2.5 px-2">
